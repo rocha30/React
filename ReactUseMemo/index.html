@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ejercicio de useMemo</title>
 
   <!-- Tailwind CSS (opcional para estilos rápidos) -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
   <div id="root"></div>
 
@@ -24,14 +26,14 @@
 
     function App() {
       const [users, setUsers] = useState([
-  { id: 1, name: "Rick Sanchez", description: "Científico brillante y alcohólico. Viaja por el multiverso con su nieto." },
-  { id: 2, name: "Morty Smith", description: "Nieto de Rick. Inseguro pero de buen corazón. Acompaña a Rick en sus aventuras." },
-  { id: 3, name: "Summer Smith", description: "Hermana mayor de Morty. Quiere ser incluida en las aventuras familiares." },
-  { id: 4, name: "Beth Smith", description: "Madre de Morty y Summer. Veterinaria de caballos. Tiene conflictos con su padre Rick." },
-  { id: 5, name: "Jerry Smith", description: "Padre de Morty. Inseguro y frecuentemente ridiculizado por Rick." },
-  { id: 6, name: "Birdperson", description: "Amigo de Rick. Guerrero filosófico con un pasado trágico." }
-]
-);
+        { id: 1, name: "Rick Sanchez", description: "Es un genio pero siempre anda bolo. " },
+        { id: 2, name: "Morty Smith", description: "Es el nieto de rick y lo acompaña a todos lados. " },
+        { id: 3, name: "Summer Smith", description: "Hermana mayor de morty y siempre quiere ir con Rick y Morty " },
+        { id: 4, name: "Beth Smith", description: "Madre de Morty y Summer. Veterinaria de caballos. Tiene conflictos con su padre Rick." },
+        { id: 5, name: "Jerry Smith", description: "Padre de Morty. Inseguro y frecuentemente ridiculizado por Rick." },
+        { id: 6, name: "Birdperson", description: "Amigo de Rick. Guerrero filosófico con un pasado trágico." }
+      ]
+      );
 
       const [searchText, setSearchText] = useState("");
       const [newUser, setNewUser] = useState({ name: "", description: "" });
@@ -142,4 +144,5 @@
     root.render(<App />);
   </script>
 </body>
+
 </html>
