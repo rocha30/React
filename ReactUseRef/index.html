@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,28 +18,34 @@
       color: #333;
       margin-top: 40px;
     }
+
     h1 {
       margin-bottom: 10px;
     }
+
     h2 {
       font-size: 3rem;
       margin: 20px 0;
     }
+
     button {
       margin: 5px;
       padding: 10px 20px;
       font-size: 1rem;
       cursor: pointer;
     }
+
     ul {
       list-style: none;
       padding: 0;
     }
+
     li {
       margin: 4px 0;
     }
   </style>
 </head>
+
 <body>
   <div id="root"></div>
 
@@ -88,13 +95,13 @@
           <h2>{formatTime(time)}</h2>
 
           <button onClick={() => setIsRunning(!isRunning)}>
-            {isRunning ? '⏸ Pausar' : '▶️ Iniciar'}
+            {isRunning ? '⏸ Pausar' : 'Iniciar'}
           </button>
 
-          <button onClick={handleReset}>🔁 Reiniciar</button>
+          <button onClick={handleReset}> Reiniciar</button>
 
           <button onClick={handleSaveSession} disabled={time === 0}>
-            💾 Guardar sesión
+            Guardar sesión
           </button>
 
           <h3>Sesiones guardadas:</h3>
@@ -110,4 +117,5 @@
     ReactDOM.render(<Stopwatch />, document.getElementById('root'));
   </script>
 </body>
+
 </html>
