@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronómetro React</title>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f0f4f8;
+      color: #333;
+      margin-top: 40px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 3rem;
+      margin: 20px 0;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    function Stopwatch() {
+      const [time, setTime] = useState(0); // tiempo en segundos
+      const [isRunning, setIsRunning] = useState(false); // estado del cronómetro
+      const [sessions, setSessions] = useState([]); // sesiones guardadas
+      const intervalRef = useRef(null); // referencia del setInterval
+
+      useEffect(() => {
+        if (isRunning) {
+          intervalRef.current = setInterval(() => {
+            setTime(prev => prev + 1);
+          }, 1000);
+        } else {
+          clearInterval(intervalRef.current);
+        }
+
+        return () => clearInterval(intervalRef.current); // limpieza
+      }, [isRunning]);
+
+      const formatTime = (seconds) => {
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+      };
+
+      const pad = (n) => (n < 10 ? `0${n}` : n);
+
+      const handleSaveSession = () => {
+        setSessions(prev => [...prev, time]); // evita modificar el array original
+      };
+
+      const handleReset = () => {
+        setIsRunning(false);
+        setTime(0);
+        setSessions([]);
+      };
+
+      return (
+        <div>
+          <h1>Cronómetro</h1>
+          <h2>{formatTime(time)}</h2>
+
+          <button onClick={() => setIsRunning(!isRunning)}>
+            {isRunning ? '⏸ Pausar' : '▶️ Iniciar'}
+          </button>
+
+          <button onClick={handleReset}>🔁 Reiniciar</button>
+
+          <button onClick={handleSaveSession} disabled={time === 0}>
+            💾 Guardar sesión
+          </button>
+
+          <h3>Sesiones guardadas:</h3>
+          <ul>
+            {sessions.map((s, i) => (
+              <li key={i}>Sesión {i + 1}: {formatTime(s)}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<Stopwatch />, document.getElementById('root'));
+  </script>
+</body>
+</html>

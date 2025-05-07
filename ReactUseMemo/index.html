@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ejercicio de useMemo</title>
+
+  <!-- Tailwind CSS (opcional para estilos rápidos) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React y ReactDOM desde CDN (versión 18) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel para compilar JSX directamente en el navegador -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tu código en JSX -->
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    function App() {
+      const [users, setUsers] = useState([
+  { id: 1, name: "Rick Sanchez", description: "Científico brillante y alcohólico. Viaja por el multiverso con su nieto." },
+  { id: 2, name: "Morty Smith", description: "Nieto de Rick. Inseguro pero de buen corazón. Acompaña a Rick en sus aventuras." },
+  { id: 3, name: "Summer Smith", description: "Hermana mayor de Morty. Quiere ser incluida en las aventuras familiares." },
+  { id: 4, name: "Beth Smith", description: "Madre de Morty y Summer. Veterinaria de caballos. Tiene conflictos con su padre Rick." },
+  { id: 5, name: "Jerry Smith", description: "Padre de Morty. Inseguro y frecuentemente ridiculizado por Rick." },
+  { id: 6, name: "Birdperson", description: "Amigo de Rick. Guerrero filosófico con un pasado trágico." }
+]
+);
+
+      const [searchText, setSearchText] = useState("");
+      const [newUser, setNewUser] = useState({ name: "", description: "" });
+      const [caseSensitive, setCaseSensitive] = useState(false);
+
+      const filteredUsers = useMemo(() => {
+        const searchFor = caseSensitive ? searchText : searchText.toLowerCase();
+
+        return users.filter(user => {
+          const userName = caseSensitive ? user.name : user.name.toLowerCase();
+          const userDesc = caseSensitive ? user.description : user.description.toLowerCase();
+          return userName.includes(searchFor) || userDesc.includes(searchFor);
+        });
+      }, [searchText, users, caseSensitive]);
+
+      const handleSearchChange = (e) => setSearchText(e.target.value);
+
+      const handleNewUserChange = (e) => {
+        const { name, value } = e.target;
+        setNewUser(prev => ({ ...prev, [name]: value }));
+      };
+
+      const handleAddUser = () => {
+        if (newUser.name.trim() && newUser.description.trim()) {
+          const newUserWithId = {
+            ...newUser,
+            id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1
+          };
+          setUsers(prev => [...prev, newUserWithId]);
+          setNewUser({ name: "", description: "" });
+        }
+      };
+
+      return (
+        <div className="p-6 max-w-3xl mx-auto">
+          <h1 className="text-2xl font-bold mb-6">Búsqueda de Usuarios de One Piece</h1>
+
+          <div className="mb-6 p-4 bg-gray-100 rounded-lg">
+            <h2 className="text-lg font-semibold mb-2">Búsqueda</h2>
+            <div className="flex items-center gap-4">
+              <input
+                type="text"
+                value={searchText}
+                onChange={handleSearchChange}
+                placeholder="Buscar por nombre o descripción..."
+                className="px-3 py-2 border rounded flex-grow"
+              />
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={caseSensitive}
+                  onChange={() => setCaseSensitive(!caseSensitive)}
+                />
+                Sensible a mayúsculas
+              </label>
+            </div>
+          </div>
+
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+            <h2 className="text-lg font-semibold mb-2">Agregar Nuevo Usuario</h2>
+            <div className="flex flex-col gap-3">
+              <input
+                type="text"
+                name="name"
+                value={newUser.name}
+                onChange={handleNewUserChange}
+                placeholder="Nombre"
+                className="px-3 py-2 border rounded"
+              />
+              <input
+                type="text"
+                name="description"
+                value={newUser.description}
+                onChange={handleNewUserChange}
+                placeholder="Descripción"
+                className="px-3 py-2 border rounded"
+              />
+              <button
+                onClick={handleAddUser}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Agregar Usuario
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold mb-2">
+              Usuarios ({filteredUsers.length} de {users.length})
+            </h2>
+            <ul className="space-y-3">
+              {filteredUsers.map(user => (
+                <li key={user.id} className="p-3 border rounded shadow-sm">
+                  <h3 className="font-medium">{user.name}</h3>
+                  <p className="text-gray-600">{user.description}</p>
+                </li>
+              ))}
+            </ul>
+            {filteredUsers.length === 0 && (
+              <p className="text-center text-gray-500 py-4">No se encontraron usuarios con ese criterio</p>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
