@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicio de useMemo</title>
+
+    <!-- Tailwind CSS (opcional para estilos rápidos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useCallback, memo } = React;
+
+        const ButtonOptimizado = memo(({ onClick }) => {
+            console.log("Renderizando el botón optimizado");
+            return (
+                <button
+                    onClick={onClick}
+                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600">
+                    Generar número aleatorio
+                </button>
+            );
+        });
+        const ButtonNormal = ({ onClick }) => {
+            console.log("Renderizando el botón normal");
+            return (
+                <button
+                    onClick={onClick}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    Incrementar contador
+                </button>
+            );
+        };
+
+        const Carta = () => {
+            const [randomNumber, setRandomNumber] = useState(0);
+            const [contador, setContador] = useState(0);
+
+            const createRandom = useCallback(() => {
+                setRandomNumber(Math.floor(Math.random() * 100));
+            }, []);
+
+            const addContador = () => {
+                setContador((prev) => prev + 1);
+            };
+
+            return (
+                <div style={{ border: '1px solid black', padding: '20px', margin: '20px' }}>
+                    <h3>Random Number: {randomNumber}</h3>
+                    <h4>Counter: {contador}</h4>
+
+                    <ButtonOptimizado onClick={createRandom} />
+                    <ButtonNormal onClick={addContador} />
+                </div>
+            );
+        };
+
+        function App() {
+            return (
+                <div>
+                    <h1>Ejemplo de useCallback</h1>
+                    <Carta />
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+
+
+    </script>
+</body>
+
+</html>
