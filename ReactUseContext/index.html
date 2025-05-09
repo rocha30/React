@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React useContext Hook</title>
+
+</head>
+
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+
+
+        //Aprendiendo a usar el UseContext  
+        // const Mycontext = React.createContext();
+        // function App() {
+        //     const user = { name: 'Mario', age: 21 };
+
+        //     return (
+        //         <Mycontext.Provider value={user}>
+        //             <ChildComponent />
+        //             <SecondChildComponent />
+        //         </Mycontext.Provider>
+        //     );
+        // }
+
+        // function ChildComponent() {
+        //     const user = React.useContext(Mycontext);
+        //     return (
+        //         <div>
+        //             <h1>Nombre: {user.name}</h1>
+        //             <h2>Edad: {user.age}</h2>
+        //         </div>
+        //     );
+        // }
+
+        // function SecondChildComponent() {
+        //     const user = React.useContext(Mycontext);
+        //     return (
+        //         <div>
+        //             <h1>Nombre: {user.name}</h1>
+        //             <h2>Edad: {user.age}</h2>
+        //         </div>
+        //     );
+        // }
+
+        // ReactDOM.render(<App />, document.getElementById('root'));
+        // root.render(<App />);
+
+        const ThemeContext = React.createContext();
+
+        function App() {
+            const [theme, setTheme] = React.useState("light"); // Estado para el tema
+
+            const toggleTheme = () => {
+                setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+            };
+
+            return (
+                <ThemeContext.Provider value={{ theme, toggleTheme }}>
+                    <div style={{
+                        backgroundColor: theme === "light" ? "#fff" : "#333",
+                        color: theme === "light" ? "#000" : "#fff",
+                        minHeight: "100vh",
+                        padding: "20px"
+                    }}>
+                        <h1>React useContext - Tema Claro/Oscuro</h1>
+                        <ThemeToggle />
+                        <ThemeDisplay />
+                    </div>
+                </ThemeContext.Provider>
+            );
+        }
+
+        function ThemeToggle() {
+            const { toggleTheme } = React.useContext(ThemeContext);
+            return (
+                <button
+                    onClick={toggleTheme}
+                    style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007BFF",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer"
+                    }}
+                >
+                    Cambiar Tema
+                </button>
+            );
+        }
+
+        function ThemeDisplay() {
+            const { theme } = React.useContext(ThemeContext); // 3. Consumir el contexto
+            return (
+                <div
+                    style={{
+                        marginTop: "20px",
+                        padding: "20px",
+                        borderRadius: "10px",
+                        backgroundColor: theme === "light" ? "#f9f9f9" : "#444",
+                        color: theme === "light" ? "#000" : "#fff",
+                        textAlign: "center"
+                    }}
+                >
+                    <h2>El tema actual es: {theme === "light" ? "Claro" : "Oscuro"}</h2>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+
+    </script>
+
+</body>
